@@ -1,0 +1,13 @@
+# yml configs
+*.yml
+*.yaml
+
+# html
+*.htm
+*.html
+
+# misc
+.gitlab-ci.yml
+
+# dependencies & third-parties
+node_modules/*

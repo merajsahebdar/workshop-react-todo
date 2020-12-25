@@ -1,0 +1,72 @@
+{
+  "name": "@merajsahebdar/workshop-react-todo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx . && prettier --write .",
+    "codegen": "apollo client:codegen --target typescript --endpoint http://localhost:3000/graphql --globalTypesFile src/app/__generated__/Schema.ts"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@apollo/react-hooks": "^3.0.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/lodash": "^4.14.166",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
+    "@types/styled-components": "^5.1.7",
+    "apollo": "^2.32.0",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link-http": "^1.5.17",
+    "apollo-utilities": "^1.3.4",
+    "graphql-tag": "^2.11.0",
+    "lodash": "^4.17.20",
+    "prettier": "^2.2.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.1",
+    "rimraf": "^3.0.2",
+    "styled-components": "^5.2.1",
+    "tiny-invariant": "^1.1.0",
+    "typescript": "^4.0.3",
+    "web-vitals": "^0.2.4"
+  },
+  "devDependencies": {
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3"
+  }
+}
