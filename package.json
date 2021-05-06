@@ -1,0 +1,63 @@
+{
+  "name": "dash-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\"",
+    "codegen": "graphql-codegen --config codegen.yml"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@apollo/client": "^3.3.13",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "apollo-link-token-refresh": "^0.3.2",
+    "cookie": "^0.4.1",
+    "formik": "^2.2.6",
+    "graphql": "^15.5.0",
+    "isomorphic-unfetch": "^3.1.0",
+    "jwt-decode": "^3.1.2",
+    "next": "10.0.9",
+    "next-compose-plugins": "^2.2.1",
+    "next-images": "^1.7.0",
+    "next-svgr": "^0.0.2",
+    "next-with-apollo": "^5.1.1",
+    "ramda": "^0.27.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-intl": "^5.15.5"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.21.3",
+    "@graphql-codegen/fragment-matcher": "^2.0.1",
+    "@graphql-codegen/introspection": "1.18.1",
+    "@graphql-codegen/typescript": "1.21.1",
+    "@graphql-codegen/typescript-operations": "1.17.15",
+    "@graphql-codegen/typescript-react-apollo": "2.2.3",
+    "@types/cookie": "^0.4.0",
+    "@types/node": "^14.14.36",
+    "@types/ramda": "^0.27.39",
+    "@types/react": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "eslint": "^7.22.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "simple-git-hooks": ">=2.0.3",
+    "typescript": "^4.2.3"
+  }
+}

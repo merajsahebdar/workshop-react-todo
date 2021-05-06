@@ -1,0 +1,15 @@
+overwrite: true
+schema:
+  - "http://localhost:8092"
+  - src/schemas/Query.graphql
+documents: "src/**/*.graphql"
+generates:
+  src/graphqlCodes.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      - "fragment-matcher"
+hooks:
+  afterOneFileWrite:
+    - yarn run format

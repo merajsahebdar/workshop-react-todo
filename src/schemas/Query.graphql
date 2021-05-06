@@ -1,0 +1,4 @@
+type Query {
+  isLoggedIn: Boolean!
+  loggedInUserId: String
+}

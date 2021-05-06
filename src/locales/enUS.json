@@ -1,0 +1,17 @@
+{
+  "app.name": "Shanbe",
+  "app.loading": "Loading...",
+  "app.networkError": "Something went wrong, please ensure you are connected to the internet, then try again.",
+
+  "auth.signIn.page.title": "Shanbe — Sign In",
+  "auth.signIn.card.title": "Sign In",
+  "auth.signIn.card.subtitle": "You have to sign in to be able to use our features.",
+
+  "auth.signIn.form.createAccount": "Create Account",
+  "auth.signIn.form.forgotPassword": "Forgot Password",
+  "auth.signIn.form.submit": "Sign In",
+  "auth.signIn.form.input.email": "Email Address",
+  "auth.signIn.form.input.password": "Password",
+
+  "dash.index.page.title": "Shanbe — Dashboard"
+}
