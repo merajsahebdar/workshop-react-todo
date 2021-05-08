@@ -1,17 +1,20 @@
 import { ServerStyleSheets } from '@material-ui/core/styles';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
 import { Children } from 'react';
-import { MetaComponent } from '../components';
 
 /**
- * Document
+ * Dash Document
  */
-export default class MyDocument extends Document {
+export default class DashDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>
-          <MetaComponent />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="//fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />
@@ -24,7 +27,7 @@ export default class MyDocument extends Document {
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with server-side generation (SSG).
-MyDocument.getInitialProps = async (ctx) => {
+DashDocument.getInitialProps = async context => {
   // Resolution order
   //
   // On the server:
@@ -49,14 +52,14 @@ MyDocument.getInitialProps = async (ctx) => {
 
   // Render app and page and get the context of the page with collected side effects.
   const sheets = new ServerStyleSheets();
-  const originalRenderPage = ctx.renderPage;
+  const originalRenderPage = context.renderPage;
 
-  ctx.renderPage = () =>
+  context.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+      enhanceApp: App => props => sheets.collect(<App {...props} />),
     });
 
-  const initialProps = await Document.getInitialProps(ctx);
+  const initialProps = await Document.getInitialProps(context);
 
   return {
     ...initialProps,

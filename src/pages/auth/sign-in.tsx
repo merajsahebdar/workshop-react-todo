@@ -2,10 +2,12 @@ import Head from 'next/head';
 import Router from 'next/router';
 import { Fragment } from 'react';
 import { useIntl } from 'react-intl';
+
 import { DASH_URL } from '../../constants';
-import { SignInComponent } from '../../features/auth';
+import { SignIn } from '../../features/auth';
 import { AppPage } from '../../interfaces';
-import { accessTokenVar } from '../../variables';
+import { isServerSide } from '../../utils';
+import { getAccessToken } from '../../variables';
 
 /**
  * Sign In
@@ -20,13 +22,19 @@ const SignInPage: AppPage = () => {
       <Head>
         <title>{formatMessage({ id: 'auth.signIn.page.title' })}</title>
       </Head>
-      <SignInComponent />
+      <SignIn />
     </Fragment>
   );
 };
 
-SignInPage.getInitialProps = async (context) => {
-  const accessToken = typeof window === 'undefined' ? context.serverAccessToken : accessTokenVar();
+/**
+ * Get Initial Props
+ *
+ * @param context
+ * @returns
+ */
+SignInPage.getInitialProps = async context => {
+  const accessToken = isServerSide() ? context.serverAccessToken : getAccessToken();
 
   if (accessToken) {
     if (context.res) {

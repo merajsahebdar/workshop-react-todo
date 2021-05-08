@@ -1,10 +1,11 @@
 import { NextComponentType } from 'next';
 import Router from 'next/router';
 import { createContext } from 'react';
+
 import { SIGN_IN_URL } from '../constants';
 import { ApolloPageContext } from '../interfaces';
 import { getDisplayName } from '../utils';
-import { accessTokenVar, getAccessTokenPayload } from '../variables';
+import { getAccessToken, getAccessTokenPayload } from '../variables';
 
 type LoginState =
   | {
@@ -32,7 +33,7 @@ export const { Provider: LoginStateProvider, Consumer: LoginStateConsumer } = Lo
  * @returns
  */
 export function withRequiredAuthentication(
-  Component: NextComponentType<ApolloPageContext, any, any>,
+  Component: NextComponentType<ApolloPageContext, any, any>
 ) {
   const WithRequiredAuthentication: NextComponentType<ApolloPageContext, LoginState, any> = ({
     isLoggedIn,
@@ -49,11 +50,11 @@ export function withRequiredAuthentication(
 
   WithRequiredAuthentication.displayName = getDisplayName(Component, 'WithRequiredAuthentication');
 
-  WithRequiredAuthentication.getInitialProps = async (context) => {
+  WithRequiredAuthentication.getInitialProps = async context => {
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(context) : {};
 
     const accessToken =
-      typeof window === 'undefined' ? context.serverAccessToken : accessTokenVar();
+      typeof window === 'undefined' ? context.serverAccessToken : getAccessToken();
 
     if (accessToken) {
       const { uid } = getAccessTokenPayload(accessToken);

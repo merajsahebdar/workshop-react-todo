@@ -1,5 +1,6 @@
 import { InMemoryCache, NormalizedCacheObject } from '@apollo/client';
-import { isLoggedInVar, loggedInUserIdVar } from '../variables';
+
+import { reactiveAuthState } from '../variables';
 
 /**
  * Initiate an instance of `InMemoryCache`.
@@ -12,11 +13,8 @@ export function initiateApolloCache(state: NormalizedCacheObject) {
     typePolicies: {
       Query: {
         fields: {
-          isLoggedIn: {
-            read: () => isLoggedInVar(),
-          },
-          loggedInUserId: {
-            read: () => loggedInUserIdVar(),
+          authState: {
+            read: () => reactiveAuthState(),
           },
         },
       },

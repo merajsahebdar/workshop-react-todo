@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core';
+import { FC, Fragment } from 'react';
 
 /**
  * App Styles
@@ -17,5 +18,15 @@ export const useAppStyles = makeStyles(() =>
         flexDirection: 'column',
       },
     },
-  }),
+  })
 );
+
+/**
+ * App Css Baseline
+ */
+export const AppCssBaseline: FC = () => {
+  // Stylesheet
+  useAppStyles();
+
+  return <Fragment />;
+};

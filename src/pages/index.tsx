@@ -2,12 +2,13 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { Fragment } from 'react';
 import { useIntl } from 'react-intl';
+
 import { withRequiredAuthentication } from '../higher-orders/withRequiredAuthentication';
 
 /**
- * Home
+ * Home Page
  */
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   // I18n
   const { formatMessage } = useIntl();
 
@@ -21,4 +22,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default withRequiredAuthentication(Home);
+export default withRequiredAuthentication(HomePage);

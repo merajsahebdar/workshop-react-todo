@@ -1,1 +1,1 @@
-export * from './SignInComponent';
+export * from './SignIn';

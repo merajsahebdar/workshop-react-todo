@@ -16,6 +16,8 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AuthState = LoggedInState | NonLoggedInState;
+
 export type AuthorizeOauthInput = {
   adapterName: OauthAdapterName;
   code: Scalars['String'];
@@ -34,6 +36,12 @@ export type Email = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   deletedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type LoggedInState = {
+  __typename?: 'LoggedInState';
+  accessToken: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type Mutation = {
@@ -71,6 +79,11 @@ export type MutationAuthorizeOAuthArgs = {
   input: AuthorizeOauthInput;
 };
 
+export type NonLoggedInState = {
+  __typename?: 'NonLoggedInState';
+  isLoggedIn: Scalars['Boolean'];
+};
+
 export enum OauthAdapterName {
   Facebook = 'FACEBOOK',
   Github = 'GITHUB',
@@ -90,8 +103,7 @@ export type Profile = {
 
 export type Query = {
   __typename?: 'Query';
-  isLoggedIn: Scalars['Boolean'];
-  loggedInUserId?: Maybe<Scalars['String']>;
+  authState: AuthState;
   user: User;
 };
 
@@ -186,7 +198,7 @@ export type SignInMutationFn = Apollo.MutationFunction<SignInMutation, SignInMut
  * });
  */
 export function useSignInMutation(
-  baseOptions?: Apollo.MutationHookOptions<SignInMutation, SignInMutationVariables>,
+  baseOptions?: Apollo.MutationHookOptions<SignInMutation, SignInMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<SignInMutation, SignInMutationVariables>(SignInDocument, options);
@@ -226,7 +238,7 @@ export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, Use
   return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
 }
 export function useUserLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>,
+  baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
@@ -241,6 +253,8 @@ export interface PossibleTypesResultData {
   };
 }
 const result: PossibleTypesResultData = {
-  possibleTypes: {},
+  possibleTypes: {
+    AuthState: ['LoggedInState', 'NonLoggedInState'],
+  },
 };
 export default result;

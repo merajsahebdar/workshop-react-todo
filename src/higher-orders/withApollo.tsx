@@ -2,18 +2,20 @@
 // NOTO: This hook designed to be in use in `../pages/_app.tsx`
 //
 
-import { IncomingMessage } from 'http';
 import { NextComponentType } from 'next';
 import Head from 'next/head';
+import { IncomingMessage } from 'node:http';
+
 import { ApolloAppContext } from '../interfaces';
 import { initiateApolloClient } from '../states';
-import { fetchAccessToken, handleAccessTokenResponse, getDisplayName } from '../utils';
 import {
-  isLoggedInVar,
-  loggedInUserIdVar,
-  accessTokenVar,
-  getAccessTokenPayload,
-} from '../variables';
+  fetchAccessToken,
+  getDisplayName,
+  handleAccessTokenResponse,
+  hasSentServerResponse,
+  isServerSide,
+} from '../utils';
+import { setAccessToken } from '../variables';
 
 // With Apollo Options
 type WithApolloOptions = {
@@ -23,20 +25,16 @@ type WithApolloOptions = {
 /**
  * Retrieve Access Token
  *
- * @param req
+ * @param request
  * @returns
  */
-async function getServerAccessToken(req?: IncomingMessage) {
-  if (typeof window === 'undefined' && req?.headers.cookie) {
-    try {
-      const { parse } = await import('cookie');
-      const { rt } = parse(req.headers.cookie);
+async function getServerAccessToken(request?: IncomingMessage) {
+  if (request?.headers.cookie) {
+    const { parse } = await import('cookie');
+    const { rt } = parse(request.headers.cookie);
 
-      if (rt) {
-        return await handleAccessTokenResponse(await fetchAccessToken({ cookie: `rt=${rt}` }));
-      }
-    } catch {
-      // ...
+    if (rt) {
+      return await handleAccessTokenResponse(await fetchAccessToken({ cookie: `rt=${rt}` }));
     }
   }
 }
@@ -55,13 +53,8 @@ export function withApollo({ ssrMode = true }: WithApolloOptions = {}) {
       serverAccessToken,
       ...props
     }) => {
-      if (typeof window !== 'undefined' && serverAccessToken) {
-        accessTokenVar(serverAccessToken);
-
-        const { uid } = getAccessTokenPayload(serverAccessToken);
-
-        isLoggedInVar(true);
-        loggedInUserIdVar(uid as string);
+      if (!isServerSide() && serverAccessToken) {
+        setAccessToken(serverAccessToken);
       }
 
       return (
@@ -77,56 +70,59 @@ export function withApollo({ ssrMode = true }: WithApolloOptions = {}) {
     WithApollo.displayName = getDisplayName(Component, 'withApollo');
 
     if (ssrMode || Component.getInitialProps) {
-      WithApollo.getInitialProps = async (appContext) => {
-        const {
-          AppTree,
-          ctx: { req },
-        } = appContext;
-
-        const serverAccessToken = await getServerAccessToken(req);
-
-        const client = initiateApolloClient({ serverAccessToken });
-        appContext.ctx.apolloClient = client;
-
-        if (serverAccessToken) {
-          appContext.ctx.serverAccessToken = serverAccessToken;
-        }
-
-        const pageProps = Component.getInitialProps
-          ? await Component.getInitialProps(appContext)
-          : {};
-
-        if (typeof window === 'undefined') {
-          if (appContext.ctx.res?.headersSent || appContext.ctx.res?.writableEnded) {
-            return pageProps;
-          }
-
-          if (ssrMode) {
-            try {
-              const { getDataFromTree } = await import('@apollo/client/react/ssr');
-              await getDataFromTree(
-                <AppTree
-                  {...pageProps}
-                  apolloClient={client}
-                  serverAccessToken={serverAccessToken}
-                />,
-              );
-            } catch {
-              // ...
-            }
-
-            Head.rewind();
-          }
-        }
-
-        return {
-          ...pageProps,
-          apolloState: client.cache.extract(),
-          serverAccessToken,
-        };
-      };
+      registerGetInitialProps(ssrMode)(Component, WithApollo);
     }
 
     return WithApollo;
+  };
+}
+
+/**
+ * Register an initial props getter for composite component.
+ *
+ * @param ssrMode
+ * @returns
+ */
+function registerGetInitialProps(ssrMode: boolean) {
+  return (
+    Component: NextComponentType<ApolloAppContext, any, any>,
+    WithApollo: NextComponentType<ApolloAppContext, any, any>
+  ) => {
+    WithApollo.getInitialProps = async appContext => {
+      const { AppTree, ctx } = appContext;
+
+      if (isServerSide()) {
+        ctx.serverAccessToken = await getServerAccessToken(ctx.req);
+      }
+
+      ctx.apolloClient = initiateApolloClient({ serverAccessToken: ctx.serverAccessToken });
+
+      const pageProps = Component.getInitialProps
+        ? await Component.getInitialProps(appContext)
+        : {};
+
+      if (hasSentServerResponse(ctx.res)) {
+        return pageProps;
+      }
+
+      if (isServerSide() && ssrMode) {
+        const { getDataFromTree } = await import('@apollo/client/react/ssr');
+        await getDataFromTree(
+          <AppTree
+            {...pageProps}
+            apolloClient={ctx.apolloClient}
+            serverAccessToken={ctx.serverAccessToken}
+          />
+        );
+
+        Head.rewind();
+      }
+
+      return {
+        ...pageProps,
+        apolloState: ctx.apolloClient.cache.extract(),
+        serverAccessToken: ctx.serverAccessToken,
+      };
+    };
   };
 }

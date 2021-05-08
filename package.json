@@ -1,17 +1,15 @@
 {
-  "name": "dash-next",
-  "version": "0.1.0",
+  "name": "@shanbe/frontend-dash",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 3001",
-    "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\" --fix",
+    "start": "next start",
+    "lint": "eslint --fix \"src/**/*.{ts,tsx,js,jsx}\"",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\"",
-    "codegen": "graphql-codegen --config codegen.yml"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "codegen": "graphql-codegen -r dotenv/config --config codegen.yml",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
@@ -25,8 +23,10 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "apollo-link-token-refresh": "^0.3.2",
     "cookie": "^0.4.1",
+    "cosmiconfig": "^7.0.0",
     "formik": "^2.2.6",
     "graphql": "^15.5.0",
+    "graphql-tag": "^2.0.0",
     "isomorphic-unfetch": "^3.1.0",
     "jwt-decode": "^3.1.2",
     "next": "10.0.9",
@@ -34,10 +34,10 @@
     "next-images": "^1.7.0",
     "next-svgr": "^0.0.2",
     "next-with-apollo": "^5.1.1",
-    "ramda": "^0.27.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-intl": "^5.15.5"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-intl": "^5.15.5",
+    "webpack": "^5.36.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.21.3",
@@ -48,16 +48,24 @@
     "@graphql-codegen/typescript-react-apollo": "2.2.3",
     "@types/cookie": "^0.4.0",
     "@types/node": "^14.14.36",
-    "@types/ramda": "^0.27.39",
-    "@types/react": "^17.0.3",
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
-    "@typescript-eslint/parser": "^4.19.0",
-    "eslint": "^7.22.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
+    "@types/react": "^17.0.5",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-sonarjs": "^0.7.0",
+    "eslint-plugin-unicorn": "^31.0.0",
+    "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
-    "simple-git-hooks": ">=2.0.3",
     "typescript": "^4.2.3"
   }
 }

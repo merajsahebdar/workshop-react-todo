@@ -23,13 +23,13 @@ export function fetchAccessToken(headers: HeadersInit = {}) {
 /**
  * Handle Access Token Response
  *
- * @param {Response} response
+ * @param response
  * @returns
  */
-export async function handleAccessTokenResponse(res: Response) {
+export async function handleAccessTokenResponse(response: Response): Promise<string | undefined> {
   try {
-    return (await res.json()).data.refreshToken;
+    return (await response.json()).data.refreshToken;
   } catch {
-    return null;
+    // ...
   }
 }

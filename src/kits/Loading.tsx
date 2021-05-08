@@ -1,9 +1,9 @@
 import {
   CircularProgress as MuiCircularProgress,
-  Grid,
-  Typography,
   createStyles,
+  Grid,
   makeStyles,
+  Typography,
   withStyles,
 } from '@material-ui/core';
 import { FC, ReactNode, useMemo } from 'react';
@@ -44,7 +44,7 @@ const CircularProgress = withStyles(() =>
     circle: {
       strokeLinecap: 'round',
     },
-  }),
+  })
 )(MuiCircularProgress);
 
 /**
@@ -52,7 +52,7 @@ const CircularProgress = withStyles(() =>
  *
  * @returns
  */
-export const useLoadingStyles = makeStyles((theme) => {
+export const useLoadingStyles = makeStyles(theme => {
   const darkMode = theme.palette.type === 'dark';
 
   return createStyles({
@@ -92,7 +92,7 @@ export const useLoadingStyles = makeStyles((theme) => {
  * @type {FC<LoadingProps>}
  */
 export const Loading: FC<LoadingProps> = (
-  { size = 'medium', children }: LoadingProps = { size: 'medium' },
+  { size = 'medium', children }: LoadingProps = { size: 'medium' }
 ) => {
   const sizeInPx = useMemo(() => calculateSize(size), [size]);
 

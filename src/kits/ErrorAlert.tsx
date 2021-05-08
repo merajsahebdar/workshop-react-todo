@@ -40,7 +40,7 @@ export function useErrorParser(error: ApolloError | Error) {
  */
 export const ErrorAlert = memo(
   forwardRef<HTMLDivElement, AlertProps & { error: ApolloError | Error }>(
-    ({ error, ...otherProps }, ref) => {
+    ({ error, ...otherProps }, reference) => {
       // I18n
       const messageOrMessages = useErrorParser(error);
 
@@ -50,20 +50,22 @@ export const ErrorAlert = memo(
       };
 
       return (
-        <Alert ref={ref} severity="error" {...otherProps}>
+        <Alert ref={reference} severity="error" {...otherProps}>
           {typeof messageOrMessages === 'string' ? (
             <Typography component="p" {...typographyProps}>
               {messageOrMessages}
             </Typography>
           ) : (
-            messageOrMessages.map((message, idxMessage) => (
-              <Typography key={idxMessage} component="p" {...typographyProps}>
+            messageOrMessages.map((message, indexMessage) => (
+              <Typography key={indexMessage} component="p" {...typographyProps}>
                 {message}
               </Typography>
             ))
           )}
         </Alert>
       );
-    },
-  ),
+    }
+  )
 );
+
+ErrorAlert.displayName = 'ErrorAlert';

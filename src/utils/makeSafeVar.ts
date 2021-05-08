@@ -1,4 +1,4 @@
-import { ReactiveVar, makeVar } from '@apollo/client';
+import { makeVar, ReactiveVar } from '@apollo/client';
 
 /**
  * Create a safe reactive variables.

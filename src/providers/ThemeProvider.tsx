@@ -1,9 +1,9 @@
 import { grey } from '@material-ui/core/colors';
 import {
-  ThemeProvider as BaseThemeProvider,
   createMuiTheme,
-  lighten,
   darken,
+  lighten,
+  ThemeProvider as BaseThemeProvider,
 } from '@material-ui/core/styles';
 import createPalette from '@material-ui/core/styles/createPalette';
 import createSpacing from '@material-ui/core/styles/createSpacing';
@@ -11,6 +11,7 @@ import { TypographyOptions } from '@material-ui/core/styles/createTypography';
 import { Shape } from '@material-ui/core/styles/shape';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { ReactNode, useMemo } from 'react';
+
 import { AlertCircleIcon, AlertTriangleIcon, CheckCircleIcon, InfoIcon } from '../assets';
 
 // Theme Provider Props

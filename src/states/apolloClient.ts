@@ -1,10 +1,12 @@
 import 'isomorphic-unfetch';
-import { ApolloClient, ApolloLink, NormalizedCacheObject, createHttpLink } from '@apollo/client';
+
+import { ApolloClient, ApolloLink, createHttpLink, NormalizedCacheObject } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { TokenRefreshLink } from 'apollo-link-token-refresh';
+
 import { API_URI } from '../constants';
 import { fetchAccessToken, handleAccessTokenResponse } from '../utils';
-import { accessTokenVar, isAccessTokenExpired } from '../variables';
+import { getAccessToken, isAccessTokenExpired, setAccessToken } from '../variables';
 import { initiateApolloCache } from './apolloCache';
 
 // Create Client Options
@@ -25,18 +27,16 @@ export let client: ApolloClient<NormalizedCacheObject>;
 function createApolloClient({ state, serverAccessToken }: CreateClientOptions) {
   const tokenRefreshLink = new TokenRefreshLink({
     isTokenValidOrUndefined: () =>
-      !isAccessTokenExpired() || typeof accessTokenVar() === 'undefined',
+      !isAccessTokenExpired() || typeof getAccessToken() === 'undefined',
     fetchAccessToken,
-    handleFetch: (accessToken) => {
-      accessTokenVar(accessToken);
+    handleFetch: accessToken => {
+      setAccessToken(accessToken);
     },
-    handleResponse: () => async (res: Response) => {
-      return await handleAccessTokenResponse(res);
-    },
+    handleResponse: () => handleAccessTokenResponse,
   });
 
   const authLink = setContext((_, { headers }) => {
-    const accessToken = typeof window === 'undefined' ? serverAccessToken : accessTokenVar();
+    const accessToken = typeof window === 'undefined' ? serverAccessToken : getAccessToken();
 
     return {
       headers: {

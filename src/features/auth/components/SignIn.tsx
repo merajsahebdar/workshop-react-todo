@@ -16,11 +16,12 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { FC, Fragment } from 'react';
 import { useIntl } from 'react-intl';
+
+import { useSignInMutation } from '../../../apis';
 import { Logo, UserPlusIcon } from '../../../assets';
 import { DASH_URL } from '../../../constants';
-import { useSignInMutation } from '../../../graphqlCodes';
-import { ErrorAlert, Link, LinkButton } from '../../../utils';
-import { accessTokenVar } from '../../../variables';
+import { ErrorAlert, Link, LinkButton } from '../../../kits';
+import { setAccessToken } from '../../../variables';
 
 /**
  * Sign In Styles
@@ -34,19 +35,19 @@ const useSignInStyles = makeStyles(({ palette }) =>
       height: 28,
       color: palette.type === 'dark' ? palette.secondary.light : palette.primary.dark,
     },
-  }),
+  })
 );
 
 /**
- * Sign In Component
+ * Sign In
  */
-export const SignInComponent: FC = () => {
+export const SignIn: FC = () => {
   const router = useRouter();
 
   // Logic
   const [signIn, { loading, error }] = useSignInMutation({
     onCompleted: async ({ signIn }) => {
-      accessTokenVar(signIn);
+      setAccessToken(signIn);
       await router.replace(DASH_URL);
     },
   });

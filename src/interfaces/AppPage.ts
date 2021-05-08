@@ -1,4 +1,5 @@
 import { NextComponentType } from 'next';
+
 import { ApolloPageContext } from './ApolloPageContext';
 
 /**

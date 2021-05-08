@@ -1,0 +1,14 @@
+type LoggedInState {
+  accessToken: String!
+  userId: String!
+}
+
+type NonLoggedInState {
+  isLoggedIn: Boolean!
+}
+
+union AuthState = LoggedInState | NonLoggedInState
+
+type Query {
+  authState: AuthState!
+}

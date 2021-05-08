@@ -1,11 +1,12 @@
 import { NextComponentType } from 'next';
 import Router from 'next/router';
 import { createContext, useContext } from 'react';
+
+import { UserDocument, UserQuery, UserQueryVariables } from '../apis';
 import { SIGN_IN_URL } from '../constants';
-import { UserDocument, UserQuery, UserQueryVariables } from '../graphqlCodes';
 import { ApolloPageContext } from '../interfaces';
 import { getDisplayName } from '../utils';
-import { accessTokenVar, getAccessTokenPayload } from '../variables';
+import { getAccessToken, getAccessTokenPayload } from '../variables';
 
 // Authorized User Context Value
 type AuthorizedUserContextValue = UserQuery['user'];
@@ -14,7 +15,7 @@ type AuthorizedUserContextValue = UserQuery['user'];
  * Authorized User Context
  */
 export const AuthorizedUserContext = createContext<AuthorizedUserContextValue>(
-  {} as AuthorizedUserContextValue,
+  {} as AuthorizedUserContextValue
 );
 
 export const {
@@ -48,11 +49,11 @@ export function withAuthorizedUser(Component: NextComponentType<ApolloPageContex
 
   WithAuthorizedUser.displayName = getDisplayName(Component, 'withAuthorizedUser');
 
-  WithAuthorizedUser.getInitialProps = async (context) => {
+  WithAuthorizedUser.getInitialProps = async context => {
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(context) : {};
 
     const accessToken =
-      typeof window === 'undefined' ? context.serverAccessToken : accessTokenVar();
+      typeof window === 'undefined' ? context.serverAccessToken : getAccessToken();
 
     if (accessToken) {
       const { uid } = getAccessTokenPayload(accessToken);
